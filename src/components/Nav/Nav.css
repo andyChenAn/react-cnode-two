@@ -1,0 +1,20 @@
+.nav {
+    background-color: #007aff;
+}
+.nav-list {
+    display: flex;
+    justify-content: space-between;
+    height: 48px;
+    line-height: 48px;
+}
+.nav-list li {
+    flex: 1;
+    text-align: center;
+}
+.nav-link {
+    display: block;
+    color: #fff;
+}
+.active {
+    color: #000;
+}
