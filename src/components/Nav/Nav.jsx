@@ -6,6 +6,7 @@ class Nav extends Component {
         super(props);
     }
     render () {
+        const { topic } = this.props;
         return (
             <nav className="nav">
                 <ul className="nav-list">

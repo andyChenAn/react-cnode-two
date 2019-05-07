@@ -5,10 +5,10 @@ class List extends Component {
         super(props);
     }
     render () {
-        const { count , onIncrement} = this.props;
+        const { onIncrement} = this.props;
         return (
             <div>
-                <div>coun is : {count}</div>
+                <div>coun is : 21</div>
                 <button onClick={onIncrement}>+</button>
             </div>
         )

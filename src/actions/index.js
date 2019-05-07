@@ -1,0 +1,1 @@
+export const SELECTED_TOPIC = 'SELECTED_TOPIC';
