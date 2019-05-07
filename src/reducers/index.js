@@ -9,4 +9,7 @@ function reducer (state = 0 , action) {
         return state;
     }
 };
+const rootReducer = combineReducers({
+    selectedTopic : selectedTopicReducer
+})
 export default reducer;
