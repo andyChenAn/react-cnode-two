@@ -19,10 +19,10 @@ export const requestSuccess = makeActionCreator(REQUEST_SUCCESS , 'topic' , 'dat
 export const requestFail = makeActionCreator(REQUEST_FAIL , 'topic' , 'error');
 export const selectTopic = makeActionCreator(SELECTED_TOPIC , 'topic');
 
-export function posts (topic) {
+function posts (topic) {
     return dispatch => {
         dispatch(requestStart(topic));
-        axios.get(`https://cnodejs.org/api/v1/topics?tab=${topic}`)
+        axios.get(`https://cnodejs.org/api/v1/topics?tab=${topic}&limit=10`)
         .then(res => {
             dispatch(requestSuccess(topic , res.data.data))
         })
@@ -31,3 +31,23 @@ export function posts (topic) {
         })
     }
 };
+
+function shouldPosts (state , topic) {
+    let list = state.postByTopic[topic];
+    let isFetching = state.isFetching;
+    if (list.length > 0) {
+        return false;
+    } else if (isFetching) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+export function postsIfNeed (topic) {
+    return (dispatch , getState) => {
+        if (shouldPosts(getState() , topic)) {
+            return dispatch(posts(topic));
+        }
+    }
+}

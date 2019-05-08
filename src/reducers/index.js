@@ -42,6 +42,8 @@ function error (state = '' , action) {
     switch (action.type) {
         case REQUEST_FAIL :
         return action.error;
+        case REQUEST_START :
+        return '';
         default :
         return state;
     }

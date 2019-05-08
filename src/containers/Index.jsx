@@ -1,7 +1,7 @@
 import React , { Component } from 'react';
 import Nav from '../components/Nav/Nav';
 import List from '../containers/List/List';
-import { posts } from '../actions/list';
+import { postsIfNeed } from '../actions/list';
 import { connect } from 'react-redux';
 import { selectTopic } from '../actions/list';
 class Index extends Component {
@@ -12,7 +12,7 @@ class Index extends Component {
         const { dispatch , location } = this.props;
         let topic = location.search.slice(5) ? location.search.slice(5) : 'all';
         dispatch(selectTopic(topic));
-        dispatch(posts(topic));
+        dispatch(postsIfNeed(topic));
     }
     componentWillReceiveProps (nextProps) {
         let selectedTopic = nextProps.location.search.slice(5) ? nextProps.location.search.slice(5) : 'all';
@@ -20,7 +20,7 @@ class Index extends Component {
         let { dispatch } = nextProps;
         if (selectedTopic !== oldSelectedTopic) {
             dispatch(selectTopic(selectedTopic));
-            dispatch(posts(selectedTopic));
+            dispatch(postsIfNeed(selectedTopic));
         }
     }
     render () {
@@ -34,7 +34,7 @@ class Index extends Component {
     }
 };
 const mapStateToProps = function (state) {
-    const { selectedTopic , postByTopic } = state;
+    const { selectedTopic } = state;
     return {
         selectedTopic
     }
