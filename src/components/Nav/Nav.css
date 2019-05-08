@@ -18,3 +18,6 @@
 .active {
     color: #000;
 }
+.nav-link.on {
+    color: #000;
+}

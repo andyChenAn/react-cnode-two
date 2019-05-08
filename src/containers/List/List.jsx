@@ -1,33 +1,37 @@
 import React , { Component } from 'react';
 import { connect } from 'react-redux';
+import Loading from '../../components/Loading/Loading';
+import ListItem from '../../components/ListItem/ListItem';
 class List extends Component {
     constructor (props) {
         super(props);
     }
     render () {
-        const { onIncrement} = this.props;
+        const { isFetching , postByTopic , selectedTopic } = this.props;
+        let topicList = postByTopic[selectedTopic];
         return (
             <div>
-                <div>coun is : 21</div>
-                <button onClick={onIncrement}>+</button>
+                {
+                    isFetching ? 
+                    <Loading /> :
+                    <ul>
+                        {
+                            topicList.map((topic , index) => {
+                                return <ListItem topic={topic} key={topic.id} />
+                            })
+                        }
+                    </ul>
+                }
             </div>
         )
     }
 };
-const mapStateToProps = (state) => {
+const mapStateToProps = function (state) {
+    const { postByTopic , isFetching , selectedTopic } = state;
     return {
-        count : state
+        postByTopic,
+        isFetching,
+        selectedTopic
     }
 };
-
-const mapDispatchToProps = (dispatch , ownProps) => {
-    return {
-        onIncrement : () => {
-            dispatch({
-                type : 'INCREMENT'
-            })
-        }
-    }
-}
-
-export default connect(mapStateToProps , mapDispatchToProps)(List);
+export default connect(mapStateToProps)(List);

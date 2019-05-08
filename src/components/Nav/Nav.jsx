@@ -11,19 +11,19 @@ class Nav extends Component {
             <nav className="nav">
                 <ul className="nav-list">
                     <li>
-                        <Link className="nav-link" to="/">全部</Link>
+                        <Link className={topic == 'all' ? "nav-link on" : "nav-link"} to="/">全部</Link>
                     </li>
                     <li>
-                        <Link className="nav-link" to="/?tab=good">精华</Link>
+                        <Link className={topic == 'good' ? "nav-link on" : "nav-link"} to="/?tab=good">精华</Link>
                     </li>
                     <li>
-                        <Link className="nav-link" to="/?tab=share">分享</Link>
+                        <Link className={topic == 'share' ? "nav-link on" : "nav-link"} to="/?tab=share">分享</Link>
                     </li>
                     <li>
-                        <Link className="nav-link" to="/?tab=ask">问答</Link>
+                        <Link className={topic == 'ask' ? "nav-link on" : "nav-link"} to="/?tab=ask">问答</Link>
                     </li>
                     <li>
-                        <Link className="nav-link" to="/?tab=job">招聘</Link>
+                        <Link className={topic == 'job' ? "nav-link on" : "nav-link"} to="/?tab=job">招聘</Link>
                     </li>
                 </ul>
             </nav>
