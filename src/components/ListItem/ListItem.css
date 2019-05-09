@@ -48,3 +48,7 @@
     font-size: 14px;
     color: #999;
 }
+.topic-link {
+    flex: 1;
+    display: flex;
+}
