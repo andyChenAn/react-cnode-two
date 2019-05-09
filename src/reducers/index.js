@@ -1,21 +1,11 @@
 import { combineReducers } from 'redux';
-import { postByTopic } from './list';
-import { SELECTED_TOPIC } from '../actions/index';
 import { 
     REQUEST_START , 
     REQUEST_SUCCESS , 
-    REQUEST_FAIL 
+    REQUEST_FAIL,
+    SELECTED_TOPIC,
+    GET_TOPIC_INFO
 } from '../actions/list';
-// function reducer (state = 0 , action) {
-//     switch (action.type) {
-//         case 'INCREMENT' : 
-//         return state + 1;
-//         case 'DECREMENT' : 
-//         return state - 1;
-//         default :
-//         return state;
-//     }
-// };
 
 function selectedTopic (state = 'all' , action) {
     switch (action.type) {
@@ -32,6 +22,7 @@ function isFetching (state = false , action) {
         return true;
         case REQUEST_SUCCESS :
         case REQUEST_FAIL :
+        case GET_TOPIC_INFO :
         return false;
         default : 
         return state;
@@ -49,10 +40,57 @@ function error (state = '' , action) {
     }
 };
 
+function postByTopic (state = {
+    all : [],
+    good : [],
+    share : [],
+    ask : [],
+    job : []
+} , action) {
+    switch (action.type) {
+        case REQUEST_SUCCESS :
+        let res = [];
+        action.data.forEach(function (item , index) {
+            res.push({
+                id : item.id,
+                title : item.title,
+                author : item.author.loginname,
+                avatar : item.author.avatar_url,
+                create_at : item.create_at,
+                tab : item.tab
+            });
+        });
+        return Object.assign({} , state , {
+            [action.topic] : res
+        });
+        default : 
+        return state;
+    }
+};
+
+function topicInfo (state = {} , action) {
+    switch (action.type) {
+        case GET_TOPIC_INFO :
+        return Object.assign({} , state , {
+            [action.data.id] : {
+                id : action.data.id,
+                content : action.data.content,
+                title : action.data.title,
+                author : action.data.author.loginname,
+                avatar : action.data.author.avatar_url,
+                visit_count : action.data.visit_count
+            }
+        });
+        default :
+        return state;
+    }
+}
+
 const rootReducer = combineReducers({
     postByTopic,
     selectedTopic,
     isFetching,
-    error
+    error,
+    topicInfo
 });
 export default rootReducer;

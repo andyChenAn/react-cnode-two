@@ -12,7 +12,18 @@ class Index extends Component {
         const { dispatch , location } = this.props;
         let topic = location.search.slice(5) ? location.search.slice(5) : 'all';
         dispatch(selectTopic(topic));
-        dispatch(postsIfNeed(topic));
+        dispatch(postsIfNeed({
+            ID : 'topic',
+            name : topic,
+            data : {
+                url : 'https://cnodejs.org/api/v1/topics',
+                params : {
+                    tab : topic,
+                    limit : 10
+                },
+                method : 'get'
+            }
+        }));
     }
     componentWillReceiveProps (nextProps) {
         let selectedTopic = nextProps.location.search.slice(5) ? nextProps.location.search.slice(5) : 'all';
@@ -20,7 +31,18 @@ class Index extends Component {
         let { dispatch } = nextProps;
         if (selectedTopic !== oldSelectedTopic) {
             dispatch(selectTopic(selectedTopic));
-            dispatch(postsIfNeed(selectedTopic));
+            dispatch(postsIfNeed({
+                name : selectedTopic,
+                ID : 'topic',
+                data : {
+                    method : 'get',
+                    url : 'https://cnodejs.org/api/v1/topics',
+                    params : {
+                        tab : selectedTopic,
+                        limit : 10
+                    }
+                }
+            }));
         }
     }
     render () {

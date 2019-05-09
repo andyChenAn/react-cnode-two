@@ -3,6 +3,7 @@ export const REQUEST_START = 'REQUEST_START';
 export const REQUEST_SUCCESS = 'REQUEST_SUCCESS';
 export const REQUEST_FAIL = 'REQUEST_FAIL';
 export const SELECTED_TOPIC = 'SELECTED_TOPIC';
+export const GET_TOPIC_INFO = 'GET_TOPIC_INFO';
 
 function makeActionCreator (type , ...args1) {
     return function (...args2) {
@@ -18,36 +19,60 @@ export const requestStart = makeActionCreator(REQUEST_START , 'topic');
 export const requestSuccess = makeActionCreator(REQUEST_SUCCESS , 'topic' , 'data');
 export const requestFail = makeActionCreator(REQUEST_FAIL , 'topic' , 'error');
 export const selectTopic = makeActionCreator(SELECTED_TOPIC , 'topic');
+export const getTopicInfo = makeActionCreator(GET_TOPIC_INFO , 'infoId' , 'data');
 
-function posts (topic) {
+function posts (options) {
     return dispatch => {
-        dispatch(requestStart(topic));
-        axios.get(`https://cnodejs.org/api/v1/topics?tab=${topic}&limit=10`)
-        .then(res => {
-            dispatch(requestSuccess(topic , res.data.data))
-        })
-        .catch(err => {
-            dispatch(requestFail(topic , err.message));
-        })
+        if (options.ID === 'topic') {
+            dispatch(requestStart(options.name));
+            axios(options.data)
+            .then(res => {
+                dispatch(requestSuccess(options.name , res.data.data))
+            })
+            .catch(err => {
+                dispatch(requestFail(options.name , err.message));
+            })
+        } else if (options.ID === 'topicInfo') {
+            dispatch(requestStart(options.name));
+            axios(options.data)
+            .then(res => {
+                dispatch(getTopicInfo(options.name , res.data.data));
+            })
+            .catch(err => {
+                dispatch(requestFail(options.name , err.message));
+            })
+        }
     }
 };
 
-function shouldPosts (state , topic) {
-    let list = state.postByTopic[topic];
-    let isFetching = state.isFetching;
-    if (list.length > 0) {
-        return false;
-    } else if (isFetching) {
-        return false;
-    } else {
-        return true;
+function shouldPosts (state , options) {
+    if (options.ID === 'topic') {
+        let list = state.postByTopic[options.name];
+        let isFetching = state.isFetching;
+        if (list.length > 0) {
+            return false;
+        } else if (isFetching) {
+            return false;
+        } else {
+            return true;
+        }
+    } else if (options.ID === 'topicInfo') {
+        let info = state.topicInfo[options.name];
+        let isFetching = state.isFetching;
+        if (info) {
+            return false;
+        } else if (isFetching) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
 
-export function postsIfNeed (topic) {
+export function postsIfNeed (options) {
     return (dispatch , getState) => {
-        if (shouldPosts(getState() , topic)) {
-            return dispatch(posts(topic));
+        if (shouldPosts(getState() , options)) {
+            return dispatch(posts(options));
         }
     }
 }

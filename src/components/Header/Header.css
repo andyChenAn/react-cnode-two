@@ -12,7 +12,7 @@
     color: #fff;
     flex: 1;
     text-align: center;
-    margin-left: -40px;
+    text-indent: -40px;
 }
 .topic-title-inner {
     display: flex;

@@ -5,7 +5,7 @@ class Header extends Component {
         super(props);
     }
     render () {
-        const { title , leftIcon , goBack , rightIcon } = this.props;
+        const { title , leftIcon , goBack } = this.props;
         return (
             <div className="topic-info-title">
                 <div className="topic-title-inner">
