@@ -78,7 +78,8 @@ function topicInfo (state = {} , action) {
                 title : action.data.title,
                 author : action.data.author.loginname,
                 avatar : action.data.author.avatar_url,
-                visit_count : action.data.visit_count
+                visit_count : action.data.visit_count,
+                replies : action.data.replies
             }
         });
         default :
