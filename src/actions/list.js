@@ -4,6 +4,7 @@ export const REQUEST_SUCCESS = 'REQUEST_SUCCESS';
 export const REQUEST_FAIL = 'REQUEST_FAIL';
 export const SELECTED_TOPIC = 'SELECTED_TOPIC';
 export const GET_TOPIC_INFO = 'GET_TOPIC_INFO';
+export const GET_COLLECT_TOPIC = 'GET_COLLECT_TOPIC';
 
 function makeActionCreator (type , ...args1) {
     return function (...args2) {
@@ -20,6 +21,7 @@ export const requestSuccess = makeActionCreator(REQUEST_SUCCESS , 'topic' , 'dat
 export const requestFail = makeActionCreator(REQUEST_FAIL , 'topic' , 'error');
 export const selectTopic = makeActionCreator(SELECTED_TOPIC , 'topic');
 export const getTopicInfo = makeActionCreator(GET_TOPIC_INFO , 'infoId' , 'data');
+export const getCollectTopic = makeActionCreator(GET_COLLECT_TOPIC , 'topicId' , 'data');
 
 function posts (options) {
     return dispatch => {
@@ -74,5 +76,19 @@ export function postsIfNeed (options) {
         if (shouldPosts(getState() , options)) {
             return dispatch(posts(options));
         }
+    }
+};
+
+export function collectTopic (options) {
+    return dispatch => {
+        return axios.post('https://cnodejs.org/api/v1/topic_collect/collect' , options)
+        .then(res => {
+            dispatch(getCollectTopic(options['topic_id'] , {
+                topicId : options['topic_id']
+            }));
+        })
+        .catch(err => {
+            dispatch(requestFail(err));
+        })
     }
 }

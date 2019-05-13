@@ -6,6 +6,7 @@
     height: 48px;
     line-height: 48px;
     background-color: #007aff;
+    z-index: 10;
 }
 .info-title {
     font-size: 16px;

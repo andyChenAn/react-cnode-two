@@ -4,7 +4,8 @@ import {
     REQUEST_SUCCESS , 
     REQUEST_FAIL,
     SELECTED_TOPIC,
-    GET_TOPIC_INFO
+    GET_TOPIC_INFO,
+    GET_COLLECT_TOPIC
 } from '../actions/list';
 
 function selectedTopic (state = 'all' , action) {
@@ -87,11 +88,26 @@ function topicInfo (state = {} , action) {
     }
 }
 
+function collectedTopic (state = {} , action) {
+    switch (action.type) {
+        case GET_COLLECT_TOPIC :
+        return Object.assign({} , state , {
+            [action.topicId] : {
+                id : action.topicId,
+                collected : true
+            }
+        });
+        default :
+        return state;
+    }
+};
+
 const rootReducer = combineReducers({
     postByTopic,
     selectedTopic,
     isFetching,
     error,
-    topicInfo
+    topicInfo,
+    collectedTopic
 });
 export default rootReducer;

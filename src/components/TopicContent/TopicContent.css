@@ -51,14 +51,34 @@
     padding: 15px;
     overflow: hidden;
     background-color: #fff;
+    margin-bottom: 10px;
 }
 .topic-info-container img {
     width: 100%;
 }
+img {
+    width: 100%;
+}
 .topic-info-reply-box {
     padding: 15px;
+    background-color: #fff;
 }
 .topic-reply-title {
     font-size: 16px;
     font-weight: bold;
+}
+.collection {
+    line-height: 1;
+    padding: 5px 10px;
+    font-size: 14px;
+    background-color: #007aff;
+    color: #fff;
+    outline: none;
+    border: 1px solid #007aff;
+    border-radius: 4px;
+    float: right;
+}
+.is-collected {
+    background-color: #888;
+    border-color: #888;
 }
