@@ -1,5 +1,4 @@
 import React , { Component } from 'react';
-import { connect } from 'react-redux';
 import Loading from '../../components/Loading/Loading';
 import ListItem from '../../components/ListItem/ListItem';
 import Error from '../../components/Error/Error';
@@ -30,13 +29,4 @@ class List extends Component {
         )
     }
 };
-const mapStateToProps = function (state) {
-    const { postByTopic , isFetching , selectedTopic , error } = state;
-    return {
-        postByTopic,
-        isFetching,
-        selectedTopic,
-        error
-    }
-};
-export default connect(mapStateToProps)(List);
+export default List;

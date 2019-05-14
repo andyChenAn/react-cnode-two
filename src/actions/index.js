@@ -7,6 +7,8 @@ export const GET_TOPIC_INFO = 'GET_TOPIC_INFO';
 export const POST_COLLECT_TOPIC = 'POST_COLLECT_TOPIC';
 export const GET_COLLECT_TOPIC = 'GET_COLLECT_TOPIC';
 export const DELETE_COLLECT_TOPIC = 'DELETE_COLLECT_TOPIC';
+export const GET_NEXT_PAGE = 'GET_NEXT_PAGE';
+export const LOADING_MORE = 'LOADING_MORE';
 
 function makeActionCreator (type , ...args1) {
     return function (...args2) {
@@ -18,6 +20,14 @@ function makeActionCreator (type , ...args1) {
     }
 };
 
+let pages = {
+    all : 1,
+    share : 1,
+    good : 1,
+    ask : 1,
+    job : 1
+};
+
 export const requestStart = makeActionCreator(REQUEST_START , 'topic');
 export const requestSuccess = makeActionCreator(REQUEST_SUCCESS , 'topic' , 'data');
 export const requestFail = makeActionCreator(REQUEST_FAIL , 'topic' , 'error');
@@ -26,6 +36,8 @@ export const getTopicInfo = makeActionCreator(GET_TOPIC_INFO , 'infoId' , 'data'
 export const postCollectTopic = makeActionCreator(POST_COLLECT_TOPIC , 'data');
 export const getCollectTopic = makeActionCreator(GET_COLLECT_TOPIC , 'data');
 export const deleteCollectTopic = makeActionCreator(DELETE_COLLECT_TOPIC , 'id');
+export const loadingMore = makeActionCreator(LOADING_MORE , 'topic');
+
 
 function posts (options) {
     return dispatch => {
@@ -120,4 +132,25 @@ export function deleteCollectedTopic (options) {
             dispatch(requestFail(err));
         })
     }
-}
+};
+
+export function postNextPageTopic (options) {
+    return dispatch => {
+        return axios.get(options.url , options.data)
+        dispatch(loadingMore())
+        .then(res => {
+            
+        })
+        .catch(err => {
+
+        })
+    }
+};
+
+export function getNextPage (topic) {
+    return {
+        type : GET_NEXT_PAGE,
+        topic,
+        page : ++pages[topic]
+    }
+};

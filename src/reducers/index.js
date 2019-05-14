@@ -7,7 +7,8 @@ import {
     GET_TOPIC_INFO,
     POST_COLLECT_TOPIC,
     GET_COLLECT_TOPIC,
-    DELETE_COLLECT_TOPIC
+    DELETE_COLLECT_TOPIC,
+    GET_NEXT_PAGE
 } from '../actions';
 
 function selectedTopic (state = 'all' , action) {
@@ -115,7 +116,24 @@ function collectByTopic (state = {} , action) {
         default : 
         return state;
     }
-}
+};
+
+function pages (state = {
+    all : 1,
+    good : 1,
+    ask : 1,
+    job : 1,
+    share : 1
+} , action) {
+    switch (action.type) {
+        case GET_NEXT_PAGE :
+        return Object.assign({} , state , {
+            [action.topic] : action.page
+        });
+        default : 
+        return state;
+    }
+};
 
 
 const rootReducer = combineReducers({
@@ -124,6 +142,7 @@ const rootReducer = combineReducers({
     isFetching,
     error,
     topicInfo,
-    collectByTopic
+    collectByTopic,
+    pages
 });
 export default rootReducer;
