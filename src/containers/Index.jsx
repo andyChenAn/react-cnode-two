@@ -1,9 +1,8 @@
 import React , { Component } from 'react';
 import Nav from '../components/Nav/Nav';
 import List from '../containers/List/List';
-import { postsIfNeed } from '../actions/list';
 import { connect } from 'react-redux';
-import { selectTopic } from '../actions/list';
+import { selectTopic , postsIfNeed } from '../actions/index';
 class Index extends Component {
     constructor (props) {
         super(props);

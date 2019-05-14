@@ -5,8 +5,10 @@ import {
     REQUEST_FAIL,
     SELECTED_TOPIC,
     GET_TOPIC_INFO,
-    GET_COLLECT_TOPIC
-} from '../actions/list';
+    POST_COLLECT_TOPIC,
+    GET_COLLECT_TOPIC,
+    DELETE_COLLECT_TOPIC
+} from '../actions';
 
 function selectedTopic (state = 'all' , action) {
     switch (action.type) {
@@ -86,21 +88,35 @@ function topicInfo (state = {} , action) {
         default :
         return state;
     }
-}
+};
 
-function collectedTopic (state = {} , action) {
+function collectByTopic (state = {} , action) {
     switch (action.type) {
-        case GET_COLLECT_TOPIC :
+        case POST_COLLECT_TOPIC :
         return Object.assign({} , state , {
-            [action.topicId] : {
-                id : action.topicId,
+            [action.data.id] : {
+                id : action.data.id,
+                collected : action.data.collected
+            }
+        });
+        case GET_COLLECT_TOPIC :
+        let res = {};
+        action.data.map(collect => {
+            res[collect.id] = {
+                id : collect.id,
                 collected : true
             }
         });
-        default :
+        return Object.assign({} , state , res);
+        case DELETE_COLLECT_TOPIC :
+        let currentState = JSON.parse(JSON.stringify(state));
+        delete currentState[action.id];
+        return currentState;
+        default : 
         return state;
     }
-};
+}
+
 
 const rootReducer = combineReducers({
     postByTopic,
@@ -108,6 +124,6 @@ const rootReducer = combineReducers({
     isFetching,
     error,
     topicInfo,
-    collectedTopic
+    collectByTopic
 });
 export default rootReducer;

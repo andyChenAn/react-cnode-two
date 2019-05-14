@@ -4,7 +4,9 @@ export const REQUEST_SUCCESS = 'REQUEST_SUCCESS';
 export const REQUEST_FAIL = 'REQUEST_FAIL';
 export const SELECTED_TOPIC = 'SELECTED_TOPIC';
 export const GET_TOPIC_INFO = 'GET_TOPIC_INFO';
+export const POST_COLLECT_TOPIC = 'POST_COLLECT_TOPIC';
 export const GET_COLLECT_TOPIC = 'GET_COLLECT_TOPIC';
+export const DELETE_COLLECT_TOPIC = 'DELETE_COLLECT_TOPIC';
 
 function makeActionCreator (type , ...args1) {
     return function (...args2) {
@@ -21,7 +23,9 @@ export const requestSuccess = makeActionCreator(REQUEST_SUCCESS , 'topic' , 'dat
 export const requestFail = makeActionCreator(REQUEST_FAIL , 'topic' , 'error');
 export const selectTopic = makeActionCreator(SELECTED_TOPIC , 'topic');
 export const getTopicInfo = makeActionCreator(GET_TOPIC_INFO , 'infoId' , 'data');
-export const getCollectTopic = makeActionCreator(GET_COLLECT_TOPIC , 'topicId' , 'data');
+export const postCollectTopic = makeActionCreator(POST_COLLECT_TOPIC , 'data');
+export const getCollectTopic = makeActionCreator(GET_COLLECT_TOPIC , 'data');
+export const deleteCollectTopic = makeActionCreator(DELETE_COLLECT_TOPIC , 'id');
 
 function posts (options) {
     return dispatch => {
@@ -79,13 +83,38 @@ export function postsIfNeed (options) {
     }
 };
 
-export function collectTopic (options) {
+export function postCollectedTopic (options) {
     return dispatch => {
-        return axios.post('https://cnodejs.org/api/v1/topic_collect/collect' , options)
+        return axios.post(options.url , options.data)
         .then(res => {
-            dispatch(getCollectTopic(options['topic_id'] , {
-                topicId : options['topic_id']
+            dispatch(postCollectTopic({
+                id : options.data.topic_id,
+                collected : res.data.success
             }));
+        })
+        .catch(err => {
+            dispatch(requestFail(err));
+        })
+    }
+};
+
+export function getCollectedTopic (options) {
+    return dispatch => {
+        return axios.get(options.url)
+        .then(res => {
+            dispatch(getCollectTopic(res.data.data))
+        })
+        .catch(err => {
+            dispatch(requestFail(err));
+        })
+    }
+};
+
+export function deleteCollectedTopic (options) {
+    return dispatch => {
+        return axios.post(options.url , options.data)
+        .then(res => {
+            dispatch(deleteCollectTopic(options.data.topic_id));
         })
         .catch(err => {
             dispatch(requestFail(err));
