@@ -1,17 +1,13 @@
 import { combineReducers } from 'redux';
-import { 
-    REQUEST_START , 
-    REQUEST_SUCCESS , 
-    REQUEST_FAIL,
+import {
     SELECTED_TOPIC,
-    GET_TOPIC_INFO,
-    POST_COLLECT_TOPIC,
-    GET_COLLECT_TOPIC,
-    DELETE_COLLECT_TOPIC,
-    GET_NEXT_PAGE
-} from '../actions';
+    START_POST_TOPICLIST,
+    RECEIVE_TOPICLIST,
+    FAIL_POST_TOPICLIST,
+    NEXT_PAGE
+} from '../actions/index';
 
-function selectedTopic (state = 'all' , action) {
+function selectedTopic (state='all' , action) {
     switch (action.type) {
         case SELECTED_TOPIC :
         return action.topic;
@@ -20,113 +16,69 @@ function selectedTopic (state = 'all' , action) {
     }
 };
 
-function isFetching (state = false , action) {
-    switch (action.type) {
-        case REQUEST_START :
-        return true;
-        case REQUEST_SUCCESS :
-        case REQUEST_FAIL :
-        case GET_TOPIC_INFO :
-        return false;
-        default : 
-        return state;
-    }
-};
-
-function error (state = '' , action) {
-    switch (action.type) {
-        case REQUEST_FAIL :
-        return action.error;
-        case REQUEST_START :
-        return '';
-        default :
-        return state;
-    }
-};
-
-function postByTopic (state = {
-    all : [],
-    good : [],
-    share : [],
-    ask : [],
-    job : []
+function getTopicList (state={
+    isFetching : false,
+    items : [],
+    error : ''
 } , action) {
     switch (action.type) {
-        case REQUEST_SUCCESS :
+        case START_POST_TOPICLIST :
+        return Object.assign({} , state , {
+            isFetching : true
+        });
+        case RECEIVE_TOPICLIST :
         let res = [];
-        action.data.forEach(function (item , index) {
+        action.data.forEach(item => {
             res.push({
                 id : item.id,
                 title : item.title,
                 author : item.author.loginname,
                 avatar : item.author.avatar_url,
                 create_at : item.create_at,
-                tab : item.tab
-            });
+                tab : item.tab,
+                visit_count : item.visit_count,
+                reply_count : item.reply_count
+            })
         });
         return Object.assign({} , state , {
-            [action.topic] : res
+            isFetching : false,
+            items : [
+                ...state.items,
+                ...res
+            ]
         });
-        default : 
-        return state;
-    }
-};
-
-function topicInfo (state = {} , action) {
-    switch (action.type) {
-        case GET_TOPIC_INFO :
+        case FAIL_POST_TOPICLIST :
         return Object.assign({} , state , {
-            [action.data.id] : {
-                id : action.data.id,
-                content : action.data.content,
-                title : action.data.title,
-                author : action.data.author.loginname,
-                avatar : action.data.author.avatar_url,
-                visit_count : action.data.visit_count,
-                replies : action.data.replies
-            }
+            isFetching : false,
+            error : action.error
         });
         default :
         return state;
     }
 };
 
-function collectByTopic (state = {} , action) {
+function topicList (state = {} , action) {
     switch (action.type) {
-        case POST_COLLECT_TOPIC :
+        case START_POST_TOPICLIST :
+        case RECEIVE_TOPICLIST :
+        case FAIL_POST_TOPICLIST :
         return Object.assign({} , state , {
-            [action.data.id] : {
-                id : action.data.id,
-                collected : action.data.collected
-            }
+            [action.topic] : getTopicList(state[action.topic] , action)
         });
-        case GET_COLLECT_TOPIC :
-        let res = {};
-        action.data.map(collect => {
-            res[collect.id] = {
-                id : collect.id,
-                collected : true
-            }
-        });
-        return Object.assign({} , state , res);
-        case DELETE_COLLECT_TOPIC :
-        let currentState = JSON.parse(JSON.stringify(state));
-        delete currentState[action.id];
-        return currentState;
         default : 
         return state;
     }
 };
 
-function pages (state = {
+function setNextPageNumber (state={
     all : 1,
     good : 1,
+    share : 1,
     ask : 1,
-    job : 1,
-    share : 1
+    job : 1
 } , action) {
     switch (action.type) {
-        case GET_NEXT_PAGE :
+        case NEXT_PAGE :
         return Object.assign({} , state , {
             [action.topic] : action.page
         });
@@ -135,14 +87,9 @@ function pages (state = {
     }
 };
 
-
 const rootReducer = combineReducers({
-    postByTopic,
     selectedTopic,
-    isFetching,
-    error,
-    topicInfo,
-    collectByTopic,
-    pages
+    topicList,
+    pages : setNextPageNumber
 });
 export default rootReducer;

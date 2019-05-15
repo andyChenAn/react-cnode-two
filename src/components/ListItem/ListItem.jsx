@@ -2,9 +2,6 @@ import React , { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './ListItem.css';
 class ListItem extends Component {
-    constructor (props) {
-        super(props);
-    }
     render () {
         const { topic } = this.props;
         return (
@@ -22,5 +19,5 @@ class ListItem extends Component {
             </li>
         )
     }
-}
+};
 export default ListItem;

@@ -1,10 +1,7 @@
 import React , { Component } from 'react';
 import { Link } from 'react-router-dom';
-import './Nav.css';
-class Nav extends Component {
-    constructor (props) {
-        super(props);
-    }
+import './TopicNav.css';
+class TopicNav extends Component {
     render () {
         const { topic } = this.props;
         return (
@@ -29,16 +26,5 @@ class Nav extends Component {
             </nav>
         )
     }
-}
-export default Nav;
-
-
-
-
-
-
-
-
-
-
-
+};
+export default TopicNav;
