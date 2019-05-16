@@ -1,6 +1,6 @@
 import React , { Component } from 'react';
 import { connect } from 'react-redux';
-import { selectTopic , postTopicList , getNextPageNumber } from '../../actions/index';
+import { selectTopic , postTopicList , getNextPageNumber , postNextTopicList } from '../../actions/index';
 import TopicNav from '../../components/TopicNav/TopicNav';
 import TopicList from '../../containers/TopicList/TopicList';
 class Index extends Component {
@@ -16,8 +16,15 @@ class Index extends Component {
         }));
         window.addEventListener('scroll' , this.handleScroll.bind(this));
     }
+    componentWillUnmount () {
+        window.removeEventListener('scroll');
+    }
     handleScroll () {
-        const { dispatch , selectedTopic } = this.props;
+        const { dispatch , selectedTopic , topicList } = this.props;
+        // 如果列表正在请求，那么滚动时就触发请求，直到请求结束后
+        if (topicList[selectedTopic].isFetching) {
+            return;
+        }
         let winH = window.innerHeight;
         let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
         let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -25,7 +32,7 @@ class Index extends Component {
         if (scrollTop + winH >= scrollHeight && scrollTop !== 0) {
             dispatch(getNextPageNumber(selectedTopic));
             const { pages } = this.props;
-            dispatch(postTopicList({
+            dispatch(postNextTopicList({
                 url : `https://cnodejs.org/api/v1/topics?limit=${10}&tab=${selectedTopic}&page=${pages[selectedTopic]}`,
                 topic : selectedTopic
             }));
@@ -47,16 +54,13 @@ class Index extends Component {
         return (
             <div>
                 <TopicNav topic={selectedTopic} />
-                {
-                    topicList[selectedTopic] && <TopicList topicList={topicList[selectedTopic]} />
-                }
+                {topicList[selectedTopic] && <TopicList topicList={topicList[selectedTopic]} />}
             </div>
         )
     }
 };
 const mapStateToProps = state => {
     const { selectedTopic , topicList , pages } = state;
-    console.log(topicList)
     return {
         selectedTopic,
         topicList,

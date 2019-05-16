@@ -4,7 +4,10 @@ import {
     START_POST_TOPICLIST,
     RECEIVE_TOPICLIST,
     FAIL_POST_TOPICLIST,
-    NEXT_PAGE
+    NEXT_PAGE,
+    START_POST_NEXT_TOPICLIST,
+    RECEVIE_NEXT_TOPICLIST,
+    FAIL_POST_NEXT_TOPICLIST
 } from '../actions/index';
 
 function selectedTopic (state='all' , action) {
@@ -23,10 +26,12 @@ function getTopicList (state={
 } , action) {
     switch (action.type) {
         case START_POST_TOPICLIST :
+        case START_POST_NEXT_TOPICLIST :
         return Object.assign({} , state , {
             isFetching : true
         });
         case RECEIVE_TOPICLIST :
+        case RECEVIE_NEXT_TOPICLIST :
         let res = [];
         action.data.forEach(item => {
             res.push({
@@ -48,6 +53,7 @@ function getTopicList (state={
             ]
         });
         case FAIL_POST_TOPICLIST :
+        case FAIL_POST_NEXT_TOPICLIST :
         return Object.assign({} , state , {
             isFetching : false,
             error : action.error
@@ -62,6 +68,9 @@ function topicList (state = {} , action) {
         case START_POST_TOPICLIST :
         case RECEIVE_TOPICLIST :
         case FAIL_POST_TOPICLIST :
+        case START_POST_NEXT_TOPICLIST :
+        case RECEVIE_NEXT_TOPICLIST :
+        case FAIL_POST_NEXT_TOPICLIST :
         return Object.assign({} , state , {
             [action.topic] : getTopicList(state[action.topic] , action)
         });

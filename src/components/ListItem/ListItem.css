@@ -27,12 +27,16 @@
 }
 .topic-item-content {
     flex: 1;
+    width: 0;
 }
 .item-title {
     font-size: 16px;
     font-weight: bold;
     line-height: 1.2;
     color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .segmetation {
     margin-bottom: 8px;

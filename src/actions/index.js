@@ -13,6 +13,13 @@ export const RECEIVE_TOPICLIST = 'RECEIVE_TOPICLIST';
 export const FAIL_POST_TOPICLIST = 'FAIL_POST_TOPICLIST';
 // 请求主题列表下一页action类型
 export const NEXT_PAGE = 'NEXT_PAGE';
+// 开始请求下一页主题列表aciton类型
+export const START_POST_NEXT_TOPICLIST = 'START_POST_NEXT_TOPICLIST';
+// 接收到请求下一页主题列表aciton类型
+export const RECEVIE_NEXT_TOPICLIST = 'RECEVIE_NEXT_TOPICLIST';
+// 请求下一页主题列表失败action类型
+export const FAIL_POST_NEXT_TOPICLIST = 'FAIL_POST_NEXT_TOPICLIST';
+
 
 const pages = {
     all : 1,
@@ -38,7 +45,7 @@ export function getNextPageNumber (topic) {
     }
 };
 
-// 请求主题列表数据的action函数
+// 点击主题导航请求主题列表数据的action函数
 export function postTopicList (options) {
     return {
         types : [START_POST_TOPICLIST , RECEIVE_TOPICLIST , FAIL_POST_TOPICLIST],
@@ -47,14 +54,29 @@ export function postTopicList (options) {
             let data = state.topicList[options.topic];
             if (!data) {
                 return true;
-            } else if (data.isFetching) {
-                return false;
             } else {
-                return true;
+                return false;
             }
         },
         payload : {topic : options.topic}
     }
 };
+
+// 请求下一页主题列表数据的aciton函数
+export function postNextTopicList (options) {
+    return {
+        types : [START_POST_NEXT_TOPICLIST , RECEVIE_NEXT_TOPICLIST , FAIL_POST_NEXT_TOPICLIST],
+        callApi : () => fetch(options.url),
+        shouldCallApi : state => {
+            let data = state.topicList[options.topic];
+            if (!data.isFetching) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        payload : {topic : options.topic , isScrollFetch : options.isScrollFetch }
+    }
+}
 
 
