@@ -3,14 +3,17 @@ import fetch from 'isomorphic-fetch';
 export const IS_FETCHING = 'ISFETCHING';
 // 全局的加载完成action类型
 export const HAS_FETCHED = 'HAS_FETCHED';
+
 // 选择主题action类型
 export const SELECTED_TOPIC = 'SELECTED_TOPIC';
+
 // 开始请求主题列表action类型
 export const START_POST_TOPICLIST = 'START_POST_TOPIC';
 // 接收到请求主题列表action类型
 export const RECEIVE_TOPICLIST = 'RECEIVE_TOPICLIST';
 // 请求主题列表失败action类型
 export const FAIL_POST_TOPICLIST = 'FAIL_POST_TOPICLIST';
+
 // 请求主题列表下一页action类型
 export const NEXT_PAGE = 'NEXT_PAGE';
 // 开始请求下一页主题列表aciton类型
@@ -20,6 +23,19 @@ export const RECEVIE_NEXT_TOPICLIST = 'RECEVIE_NEXT_TOPICLIST';
 // 请求下一页主题列表失败action类型
 export const FAIL_POST_NEXT_TOPICLIST = 'FAIL_POST_NEXT_TOPICLIST';
 
+// 开始请求主题内容aciton类型
+export const START_POST_TOPIC_CONTENT = 'START_POST_TOPIC_CONTENT';
+// 接收到主题内容action类型
+export const RECEVIE_TOPIC_CONTENT = 'RECEVIE_TOPIC_CONTENT';
+// 请求主题内容失败action类型
+export const FAIL_TOPIC_CONTENT = 'FAIL_TOPIC_CONTENT';
+
+// 开始请求收藏主题action类型
+export const START_POST_COLLECT_TOPIC = 'START_POST_COLLECT_TOPIC';
+// 请求收藏主题成功action类型
+export const SUCCESS_POST_COLLECT_TOPIC = 'SUCCESS_POST_COLLECT_TOPIC';
+// 请求收藏主题失败action类型
+export const FAIL_POST_COLLECT_TOPIC = 'FAIL_POST_COLLECT_TOPIC';
 
 const pages = {
     all : 1,
@@ -75,8 +91,37 @@ export function postNextTopicList (options) {
                 return false;
             }
         },
-        payload : {topic : options.topic , isScrollFetch : options.isScrollFetch }
+        payload : {topic : options.topic}
     }
-}
+};
+
+export function postTopicContent (options) {
+    return {
+        types : [START_POST_TOPIC_CONTENT , RECEVIE_TOPIC_CONTENT , FAIL_TOPIC_CONTENT],
+        callApi : () => fetch(options.url),
+        shouldCallApi : state => {
+            let data = state.content[options.id];
+            if (!data) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        payload : {id : options.id}
+    }
+};
+
+// 收藏主题功能
+export function postCollectTopic (options) {
+    return {
+        types : [START_POST_COLLECT_TOPIC , SUCCESS_POST_COLLECT_TOPIC , FAIL_POST_COLLECT_TOPIC],
+        callApi : () => fetch(options.url , {
+            method : 'post',
+            body : JSON.stringify(options.data)
+        })
+    }
+};
+
+
 
 

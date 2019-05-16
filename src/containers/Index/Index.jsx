@@ -4,6 +4,10 @@ import { selectTopic , postTopicList , getNextPageNumber , postNextTopicList } f
 import TopicNav from '../../components/TopicNav/TopicNav';
 import TopicList from '../../containers/TopicList/TopicList';
 class Index extends Component {
+    constructor (props) {
+        super(props);
+        this.handleScroll = this.handleScroll.bind(this);
+    }
     componentDidMount () {
         const { dispatch , location } = this.props;
         let topic = location.search.slice(5) ? location.search.slice(5) : 'all';
@@ -14,10 +18,10 @@ class Index extends Component {
             url : `https://cnodejs.org/api/v1/topics?limit=${10}&tab=${topic}`,
             topic : topic
         }));
-        window.addEventListener('scroll' , this.handleScroll.bind(this));
+        window.addEventListener('scroll' , this.handleScroll);
     }
     componentWillUnmount () {
-        window.removeEventListener('scroll');
+        window.removeEventListener('scroll' , this.handleScroll);
     }
     handleScroll () {
         const { dispatch , selectedTopic , topicList } = this.props;

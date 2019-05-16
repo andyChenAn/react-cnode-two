@@ -1,0 +1,54 @@
+.reply-list {
+    padding: 15px 0;
+    position: relative;
+    display: flex;
+}
+.reply-list:after {
+    position: absolute;
+    content: '';
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #e4e4e4;
+    transform: scale(1 , .5);
+}
+.reply-logo-box {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+}
+.reply-logo {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.reply-content-box {
+    flex:1;
+}
+.reply-user {
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+}
+.reply-content {
+    font-size: 14px;
+    color: #333;
+}
+.reply-icon-box {
+    display: flex;
+    justify-content: flex-end;
+}
+.iconfont.icon-dianzan {
+    font-size: 18px;
+    color: #666;
+    margin-right: 3px;
+}
+.iconfont.icon-ico_home_reply {
+    font-size: 18px;
+    color: #666;
+}
+.reply-dianzan-box {
+    margin-right: 10px;
+    line-height: 1;
+}

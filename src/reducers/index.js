@@ -7,7 +7,10 @@ import {
     NEXT_PAGE,
     START_POST_NEXT_TOPICLIST,
     RECEVIE_NEXT_TOPICLIST,
-    FAIL_POST_NEXT_TOPICLIST
+    FAIL_POST_NEXT_TOPICLIST,
+    START_POST_TOPIC_CONTENT,
+    RECEVIE_TOPIC_CONTENT,
+    FAIL_TOPIC_CONTENT
 } from '../actions/index';
 
 function selectedTopic (state='all' , action) {
@@ -96,9 +99,54 @@ function setNextPageNumber (state={
     }
 };
 
+function getContent (state = {
+    isFetching : false,
+    error : ''
+} , action) {
+    switch (action.type) {
+        case START_POST_TOPIC_CONTENT :
+        return Object.assign({} , state , {
+            isFetching : true
+        });
+        case RECEVIE_TOPIC_CONTENT :
+        return Object.assign({} , state , {
+            isFetching : false,
+            id : action.data.id,
+            content : action.data.content,
+            title : action.data.title,
+            author : action.data.author.loginname,
+            avatar : action.data.author.avatar_url,
+            replies : action.data.replies,
+            visit_count : action.data.visit_count
+        });
+        case FAIL_TOPIC_CONTENT :
+        return Object.assign({} , state , {
+            isFetching : false,
+            error : action.error
+        });
+        default :
+        return state;
+    }
+}
+
+// 获取主题详情
+function postContent (state={} , action) {
+    switch (action.type) {
+        case START_POST_TOPIC_CONTENT :
+        case RECEVIE_TOPIC_CONTENT :
+        case FAIL_TOPIC_CONTENT :
+        return Object.assign({} , state , {
+            [action.id] : getContent(state[action.id] , action)
+        });
+        default :
+        return state;
+    }
+}
+
 const rootReducer = combineReducers({
     selectedTopic,
     topicList,
-    pages : setNextPageNumber
+    pages : setNextPageNumber,
+    content : postContent
 });
 export default rootReducer;

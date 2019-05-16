@@ -1,0 +1,25 @@
+.topic-info-title {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 48px;
+    line-height: 48px;
+    background-color: #007aff;
+    z-index: 10;
+}
+.info-title {
+    font-size: 16px;
+    color: #fff;
+    flex: 1;
+    text-align: center;
+    text-indent: -40px;
+}
+.topic-title-inner {
+    display: flex;
+}
+.icon-fanhui {
+    width: 40px;
+    text-align: center;
+    color: #fff;
+}
