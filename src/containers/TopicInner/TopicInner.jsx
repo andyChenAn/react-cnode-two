@@ -25,7 +25,7 @@ class TopicInner extends Component {
         this.props.history.goBack();
     }
     render () {
-        const { content } = this.props;
+        const { content , history } = this.props;
         const { id } = this.state;
         return (
             <div>
@@ -34,7 +34,7 @@ class TopicInner extends Component {
                     content[id] && content[id].isFetching ?
                     <Loading /> :
                     content[id] && !content[id].isFetching ?
-                    <TopicContent content={content[id]} /> : 
+                    <TopicContent history={history} content={content[id]} /> : 
                     null
                 }
             </div>

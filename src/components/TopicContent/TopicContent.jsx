@@ -1,12 +1,18 @@
 import React , { Component } from 'react';
 import './TopicContent.css';
+import { storage } from '../../utils';
 import Reply from '../../components/Reply/Reply';
 import { connect } from 'react-redux';
 import { postCollectTopic } from '../../actions/index';
 class TopicContent extends Component {
     collect = () => {
-        const { dispatch } = this.props;
+        const { dispatch , history } = this.props;
         const { id } = this.props.content;
+        let accesstoken = storage.get('accesstoken');
+        if (!accesstoken) {
+            history.push('/login');
+            return;
+        }
         dispatch(postCollectTopic({
             url : `https://cnodejs.org/api/v1/topic_collect/collect`,
             data : {
