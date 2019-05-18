@@ -126,10 +126,28 @@ export function postCollectTopic (options) {
         types : [START_POST_COLLECT_TOPIC , SUCCESS_POST_COLLECT_TOPIC , FAIL_POST_COLLECT_TOPIC],
         callApi : () => fetch(options.url , {
             method : 'post',
-            body : JSON.stringify(options.data)
+            body : JSON.stringify(options.data),
+            headers : {
+                'content-type' : 'application/json'
+            }
         })
     }
 };
+
+// 获取用户收藏主题数据
+export function getCollectTopic (options) {
+    return {
+        types : [START_POST_COLLECT_TOPIC , SUCCESS_POST_COLLECT_TOPIC , FAIL_POST_COLLECT_TOPIC],
+        callApi : () => fetch(options.url , {
+            method : 'post',
+            body : JSON.stringify(options.data),
+            headers : {
+                'content-type' : 'application/json'
+            }
+        }),
+        payload : {method : 'get'}   // 通过payload来区别该请求是点击收藏还是获取收藏状态
+    }
+}
 
 export function postAccessToken (options) {
     return {
@@ -147,7 +165,7 @@ export function postAccessToken (options) {
         },
         success : (payload) => {
             storage.set('accesstoken' , payload.accesstoken);
-            payload.history.push('/');
+            payload.history.go(-1);
         }
     }
 };

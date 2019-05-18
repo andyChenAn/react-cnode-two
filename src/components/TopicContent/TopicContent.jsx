@@ -16,7 +16,7 @@ class TopicContent extends Component {
         dispatch(postCollectTopic({
             url : `https://cnodejs.org/api/v1/topic_collect/collect`,
             data : {
-                accesstoken : 'sdfsfd',
+                accesstoken,
                 topic_id : id
             }
         }));

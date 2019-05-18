@@ -13,7 +13,10 @@ import {
     FAIL_TOPIC_CONTENT,
     START_POST_ACCESSTOKEN,
     SUCCESS_POST_ACCESSTOKEN,
-    FAIL_POST_ACCESSTOKEN
+    FAIL_POST_ACCESSTOKEN,
+    START_POST_COLLECT_TOPIC,
+    SUCCESS_POST_COLLECT_TOPIC,
+    FAIL_POST_COLLECT_TOPIC
 } from '../actions/index';
 
 function selectedTopic (state='all' , action) {
@@ -146,6 +149,7 @@ function postContent (state={} , action) {
     }
 };
 
+// 验证用户
 function accesstoken (state={
     isFetching : false,
     validate : null
@@ -171,11 +175,40 @@ function accesstoken (state={
     }
 };
 
+function collection (state={} , action) {
+    switch (action.type) {
+        case START_POST_COLLECT_TOPIC :
+        return Object.assign({} , state , {
+            [action.id] : {
+                isFetching : true,
+                collected : false
+            }
+        });
+        case SUCCESS_POST_COLLECT_TOPIC :
+        return Object.assign({} , state , {
+            [action.id] : {
+                isFetching : false,
+                collected : true,
+            }
+        });
+        case FAIL_POST_COLLECT_TOPIC :
+        return Object.assign({} , state , {
+            [action.id] : {
+                isFetching : false,
+                collected : false
+            }
+        });
+        default : 
+        return state;
+    }
+}
+
 const rootReducer = combineReducers({
     selectedTopic,
     topicList,
     pages : setNextPageNumber,
     content : postContent,
-    accesstoken
+    accesstoken,
+    collection
 });
 export default rootReducer;
