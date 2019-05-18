@@ -10,7 +10,10 @@ import {
     FAIL_POST_NEXT_TOPICLIST,
     START_POST_TOPIC_CONTENT,
     RECEVIE_TOPIC_CONTENT,
-    FAIL_TOPIC_CONTENT
+    FAIL_TOPIC_CONTENT,
+    START_POST_ACCESSTOKEN,
+    SUCCESS_POST_ACCESSTOKEN,
+    FAIL_POST_ACCESSTOKEN
 } from '../actions/index';
 
 function selectedTopic (state='all' , action) {
@@ -141,12 +144,38 @@ function postContent (state={} , action) {
         default :
         return state;
     }
-}
+};
+
+function accesstoken (state={
+    isFetching : false,
+    validate : null
+} , action) {
+    switch (action.type) {
+        case START_POST_ACCESSTOKEN :
+        return Object.assign({} , state , {
+            isFetching : true,
+            validate : false
+        });
+        case SUCCESS_POST_ACCESSTOKEN :
+        return Object.assign({} , state , {
+            isFetching : false,
+            validate : true
+        });
+        case FAIL_POST_ACCESSTOKEN :
+        return Object.assign({} , state , {
+            isFetching : false,
+            validate : false
+        });
+        default : 
+        return state;
+    }
+};
 
 const rootReducer = combineReducers({
     selectedTopic,
     topicList,
     pages : setNextPageNumber,
-    content : postContent
+    content : postContent,
+    accesstoken
 });
 export default rootReducer;

@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch';
+import { storage } from '../utils';
 // 全局的加载中action类型
 export const IS_FETCHING = 'ISFETCHING';
 // 全局的加载完成action类型
@@ -36,6 +37,14 @@ export const START_POST_COLLECT_TOPIC = 'START_POST_COLLECT_TOPIC';
 export const SUCCESS_POST_COLLECT_TOPIC = 'SUCCESS_POST_COLLECT_TOPIC';
 // 请求收藏主题失败action类型
 export const FAIL_POST_COLLECT_TOPIC = 'FAIL_POST_COLLECT_TOPIC';
+
+// 开始请求验证accessToken的action类型
+export const START_POST_ACCESSTOKEN = 'START_POST_ACCESSTOKEN';
+// 验证accessToken成功的action类型
+export const SUCCESS_POST_ACCESSTOKEN = 'SUCCESS_POST_ACCESSTOKEN';
+// 请求验证accessToken失败的action类型
+export const FAIL_POST_ACCESSTOKEN = 'FAIL_POST_ACCESSTOKEN';
+
 
 const pages = {
     all : 1,
@@ -119,6 +128,27 @@ export function postCollectTopic (options) {
             method : 'post',
             body : JSON.stringify(options.data)
         })
+    }
+};
+
+export function postAccessToken (options) {
+    return {
+        types : [START_POST_ACCESSTOKEN , SUCCESS_POST_ACCESSTOKEN , FAIL_POST_ACCESSTOKEN],
+        callApi : () => fetch(options.url , {
+            method : 'POST',
+            body : JSON.stringify(options.data),
+            headers : {
+                'content-type' : 'application/json'
+            }
+        }),
+        payload : {
+            history : options.history , 
+            accesstoken : options.data.accesstoken
+        },
+        success : (payload) => {
+            storage.set('accesstoken' , payload.accesstoken);
+            payload.history.push('/');
+        }
     }
 };
 

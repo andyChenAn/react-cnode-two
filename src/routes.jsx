@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router , Route , Switch } from 'react-router-dom';
 import Index from './containers/Index/Index';
 import TopicInner from './containers/TopicInner/TopicInner';
+import Login from './containers/Login/Login';
 const routes = [
     {
         exact : true,
@@ -12,6 +13,11 @@ const routes = [
         exact : true,
         path : '/topic/:id',
         component : TopicInner
+    },
+    {
+        exact : true,
+        path : '/login',
+        component : Login
     }
 ]
 const Routes = (

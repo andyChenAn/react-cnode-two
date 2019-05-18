@@ -7,7 +7,9 @@ const asyncFetch = ({dispatch , getState}) => next => action => {
         types,
         shouldCallApi = () => true,
         callApi,
-        payload = {}
+        payload = {},
+        success = () => {},
+        fail = () => {}
     } = action;
     // 如果没有types，那么就跳过这个中间件
     if (!types) {
@@ -36,15 +38,17 @@ const asyncFetch = ({dispatch , getState}) => next => action => {
             });
         }
     }).then(json => {
-        return dispatch(Object.assign({} , payload , {
+        dispatch(Object.assign({} , payload , {
             type : receiveType,
             data : json.data
         }));
+        success.call(this , payload);
     }).catch(err => {
-        return dispatch(Object.assign({} , payload , {
+        dispatch(Object.assign({} , payload , {
             type : failType,
             error : err
         }));
+        fail.call(this , err);
     });
 }
 
