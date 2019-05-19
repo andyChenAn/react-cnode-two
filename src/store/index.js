@@ -40,7 +40,7 @@ const asyncFetch = ({dispatch , getState}) => next => action => {
     }).then(json => {
         dispatch(Object.assign({} , payload , {
             type : receiveType,
-            data : json.data
+            data : json.data ? json.data : json
         }));
         success.call(this , payload);
     }).catch(err => {

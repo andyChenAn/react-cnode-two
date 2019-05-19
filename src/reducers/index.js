@@ -18,6 +18,7 @@ import {
     SUCCESS_POST_COLLECT_TOPIC,
     FAIL_POST_COLLECT_TOPIC
 } from '../actions/index';
+import { storage } from '../utils';
 
 function selectedTopic (state='all' , action) {
     switch (action.type) {
@@ -161,6 +162,7 @@ function accesstoken (state={
             validate : false
         });
         case SUCCESS_POST_ACCESSTOKEN :
+        storage.set('user' , JSON.stringify(action.data));
         return Object.assign({} , state , {
             isFetching : false,
             validate : true
@@ -175,29 +177,53 @@ function accesstoken (state={
     }
 };
 
+// 收藏主题逻辑，其中包括收藏，取消收藏，获取收藏主题列表
 function collection (state={} , action) {
     switch (action.type) {
         case START_POST_COLLECT_TOPIC :
-        return Object.assign({} , state , {
-            [action.id] : {
-                isFetching : true,
-                collected : false
-            }
-        });
+        if (action.method === 'get' || action.method === 'delete') {
+            return state;
+        } else if (action.method === 'post') {
+            return Object.assign({} , state , {
+                [action.id] : {
+                    isFetching : true,
+                    collected : false
+                }
+            });
+        }
         case SUCCESS_POST_COLLECT_TOPIC :
-        return Object.assign({} , state , {
-            [action.id] : {
-                isFetching : false,
-                collected : true,
-            }
-        });
+        if (action.method === 'get') {
+            let res = {};
+            action.data.forEach(item => {
+                res[item.id] = {
+                    isFetching : false,
+                    collected : true
+                }
+            });
+            return res;
+        } else if (action.method === 'post') {
+            return Object.assign({} , state , {
+                [action.id] : {
+                    isFetching : false,
+                    collected : true,
+                }
+            });
+        } else if (action.method === 'delete') {
+            let res = JSON.parse(JSON.stringify(state));
+            delete res[action.id];
+            return res;
+        };
         case FAIL_POST_COLLECT_TOPIC :
-        return Object.assign({} , state , {
-            [action.id] : {
-                isFetching : false,
-                collected : false
-            }
-        });
+        if (action.method === 'get' || action.method === 'delete') {
+            return state;
+        } else if (action.method === 'post') {
+            return Object.assign({} , state , {
+                [action.id] : {
+                    isFetching : false,
+                    collected : false
+                }
+            });
+        }
         default : 
         return state;
     }

@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { storage } from '../utils';
+import { bindActionCreators } from '../../node_modules/redux';
 // 全局的加载中action类型
 export const IS_FETCHING = 'ISFETCHING';
 // 全局的加载完成action类型
@@ -130,12 +131,25 @@ export function postCollectTopic (options) {
             headers : {
                 'content-type' : 'application/json'
             }
-        })
+        }),
+        payload : {
+            method : 'post',  // 通过payload来区别该请求是点击收藏还是获取收藏状态，如果是post那么表示这个请求是用户点击按钮收藏主题，如果是get那么表示这个请求是获取用户之前已收藏的主题
+            id : options.data.topic_id
+        }
     }
 };
 
 // 获取用户收藏主题数据
 export function getCollectTopic (options) {
+    return {
+        types : [START_POST_COLLECT_TOPIC , SUCCESS_POST_COLLECT_TOPIC , FAIL_POST_COLLECT_TOPIC],
+        callApi : () => fetch(options.url),
+        payload : {method : 'get'}    // 通过payload来区别该请求是点击收藏还是获取收藏状态，如果是post那么表示这个请求是用户点击按钮收藏主题，如果是get那么表示这个请求是获取用户之前已收藏的主题
+    }
+};
+
+// 取消用户收藏主题
+export function deleteCollectTopic (options) {
     return {
         types : [START_POST_COLLECT_TOPIC , SUCCESS_POST_COLLECT_TOPIC , FAIL_POST_COLLECT_TOPIC],
         callApi : () => fetch(options.url , {
@@ -145,7 +159,7 @@ export function getCollectTopic (options) {
                 'content-type' : 'application/json'
             }
         }),
-        payload : {method : 'get'}   // 通过payload来区别该请求是点击收藏还是获取收藏状态
+        payload : {method : 'delete' , id : options.data.topic_id}
     }
 }
 
