@@ -65,7 +65,6 @@ class Index extends Component {
 };
 const mapStateToProps = state => {
     const { selectedTopic , topicList , pages } = state;
-    console.log(topicList)
     return {
         selectedTopic,
         topicList,

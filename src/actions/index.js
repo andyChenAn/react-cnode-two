@@ -77,7 +77,7 @@ export function postTopicList (options) {
         types : [START_POST_TOPICLIST , RECEIVE_TOPICLIST , FAIL_POST_TOPICLIST],
         callApi : () => fetch(options.url),
         shouldCallApi : state => {
-            let data = state.topicList[options.topic];
+            let data = state.topicList && state.topicList[options.topic];
             if (!data) {
                 return true;
             } else {
