@@ -18,7 +18,7 @@ class TopicContent extends Component {
                         </div>
                         <div className="mb5 info-visit">浏览次数：{content.visit_count}次</div>
                         {
-                            collection[content.id] ?
+                            collection[content.id] && collection[content.id].collected ? 
                             <button onClick={deCollect} data-id={content.id} className="collection is-collected">取消收藏</button> :
                             <button onClick={collect} className="collection">收藏</button>
                         }

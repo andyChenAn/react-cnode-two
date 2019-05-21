@@ -1,6 +1,4 @@
 import fetch from 'isomorphic-fetch';
-import { storage } from '../utils';
-import { bindActionCreators } from '../../node_modules/redux';
 // 全局的加载中action类型
 export const IS_FETCHING = 'ISFETCHING';
 // 全局的加载完成action类型
@@ -176,10 +174,6 @@ export function postAccessToken (options) {
         payload : {
             history : options.history , 
             accesstoken : options.data.accesstoken
-        },
-        success : (payload) => {
-            storage.set('accesstoken' , payload.accesstoken);
-            payload.history.go(-1);
         }
     }
 };

@@ -25,9 +25,11 @@ class TopicInner extends Component {
             id : id
         }));
         // 获取用户收藏主题列表
-        dispatch(getCollectTopic({
-            url : `https://cnodejs.org/api/v1/topic_collect/${user.loginname}`
-        }));
+        if (user) {
+            dispatch(getCollectTopic({
+                url : `https://cnodejs.org/api/v1/topic_collect/${user.loginname}`
+            }));
+        }
     }
     goBack = () => {
         this.props.history.goBack();
@@ -43,7 +45,7 @@ class TopicInner extends Component {
         dispatch(postCollectTopic({
             url : `https://cnodejs.org/api/v1/topic_collect/collect`,
             data : {
-                accesstoken,
+                accesstoken : accesstoken,
                 topic_id : id
             }
         }));
@@ -52,6 +54,10 @@ class TopicInner extends Component {
         const { dispatch } = this.props;
         const topic_id = e.target.dataset.id;
         const accesstoken = storage.get('accesstoken');
+        if (!accesstoken) {
+            history.push('/login');
+            return;
+        }
         dispatch(deleteCollectTopic({
             url : `https://cnodejs.org/api/v1/topic_collect/de_collect`,
             data : {

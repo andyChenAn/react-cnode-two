@@ -49,16 +49,14 @@ export const asyncFetch = ({dispatch , getState}) => next => action => {
             });
         }
     }).then(json => {
-        dispatch(Object.assign({} , payload , {
+        return dispatch(Object.assign({} , payload , {
             type : receiveType,
             data : json.data ? json.data : json
         }));
-        success.call(this , payload);
     }).catch(err => {
-        dispatch(Object.assign({} , payload , {
+        return dispatch(Object.assign({} , payload , {
             type : failType,
             error : err
         }));
-        fail.call(this , err);
     });
 };

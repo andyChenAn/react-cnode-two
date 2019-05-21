@@ -3,6 +3,7 @@ import './Login.css';
 import Header from '../../components/Header/Header';
 import { connect } from 'react-redux';
 import { postAccessToken } from '../../actions/index';
+import { storage } from '../../utils';
 class Login extends Component {
     constructor (props) {
         super(props);
@@ -24,7 +25,10 @@ class Login extends Component {
                 accesstoken
             },
             history
-        }));
+        })).then(res => {
+            storage.set('accesstoken' , res.accesstoken);
+            history.go(-1);
+        });
     }
     render () {
         const { accesstoken } = this.props;
