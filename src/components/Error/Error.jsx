@@ -7,8 +7,8 @@ class Error extends Component {
             <div className="error-box">
                 {
                     error.status === 404 ?
-                    <div style={{color : "#f00"}}>请求的页面资源未找到</div> :
-                    <div>{error.statusText}</div>
+                    <div style={{color : "#f00"}} className="error-text">请求的页面资源未找到</div> :
+                    <div className="error-text">{error.statusText}</div>
                 }
             </div>
         )
