@@ -26,7 +26,9 @@ class Login extends Component {
             },
             history
         })).then(res => {
+            const user = JSON.stringify(res.data);
             storage.set('accesstoken' , res.accesstoken);
+            storage.set('user' , user);
             history.go(-1);
         });
     }

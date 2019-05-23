@@ -18,7 +18,6 @@ import {
     SUCCESS_POST_COLLECT_TOPIC,
     FAIL_POST_COLLECT_TOPIC
 } from '../actions/index';
-import { storage } from '../utils';
 
 function selectedTopic (state='all' , action) {
     switch (action.type) {
@@ -162,10 +161,10 @@ function accesstoken (state={
             validate : false
         });
         case SUCCESS_POST_ACCESSTOKEN :
-        storage.set('user' , JSON.stringify(action.data));
         return Object.assign({} , state , {
             isFetching : false,
-            validate : true
+            validate : true,
+            data : action.data
         });
         case FAIL_POST_ACCESSTOKEN :
         return Object.assign({} , state , {
