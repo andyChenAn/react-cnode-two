@@ -70,3 +70,24 @@ npm start
 ```
 npm test
 ```
+## 项目展示
+
+首页
+
+![2.png](https://github.com/andyChenAn/react-cnode-two/raw/master/images/2.png)
+
+页面加载中效果
+
+![3.png](https://github.com/andyChenAn/react-cnode-two/raw/master/images/3.png)
+
+详细页
+
+![4.png](https://github.com/andyChenAn/react-cnode-two/raw/master/images/4.png)
+
+登录页
+
+![5.png](https://github.com/andyChenAn/react-cnode-two/raw/master/images/5.png)
+
+代码测试（包括action，reducer，component）
+
+![6.png](https://github.com/andyChenAn/react-cnode-two/raw/master/images/6.png)
